@@ -27,31 +27,36 @@ public class ECommerceJavaConfigControllerTest {
 	// Test if the Spring context loads the beans correctly from Java configuration
 	@Test
 	public void testApplicationContextLoads() throws IOException {
-		// Load the context using Java-based configuration
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		try {
+			// Load the context using Java-based configuration
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		// Retrieve beans from the context by name to avoid ambiguity
-		Product product = context.getBean("product", Product.class); // Referring to the "product" bean
-		Product productPrototype = context.getBean("productPrototype", Product.class); // Referring to the
-																						// "productPrototype" bean
-		Customer customer = context.getBean(Customer.class);
-		Order order = context.getBean(Order.class);
+			// Retrieve beans from the context by name to avoid ambiguity
+			Product product = context.getBean("product", Product.class); // Referring to the "product" bean
+			Product productPrototype = context.getBean("productPrototype", Product.class); // Referring to the
+																							// "productPrototype" bean
+			Customer customer = context.getBean(Customer.class);
+			Order order = context.getBean(Order.class);
 
-		// Assert that beans are created
-		boolean productLoaded = product != null;
-		boolean customerLoaded = customer != null;
-		boolean orderLoaded = order != null;
-		boolean productPrototypeLoaded = productPrototype != null;
+			// Assert that beans are created
+			boolean productLoaded = product != null;
+			boolean customerLoaded = customer != null;
+			boolean orderLoaded = order != null;
+			boolean productPrototypeLoaded = productPrototype != null;
 
-		// Log the checks
-		System.out.println("Product bean loaded: " + productLoaded);
-		System.out.println("Product (Prototype) bean loaded: " + productPrototypeLoaded);
-		System.out.println("Customer bean loaded: " + customerLoaded);
-		System.out.println("Order bean loaded: " + orderLoaded);
+			// Log the checks
+			System.out.println("Product bean loaded: " + productLoaded);
+			System.out.println("Product (Prototype) bean loaded: " + productPrototypeLoaded);
+			System.out.println("Customer bean loaded: " + customerLoaded);
+			System.out.println("Order bean loaded: " + orderLoaded);
 
-		// Auto-grading with yakshaAssert
-		yakshaAssert(currentTest(), productLoaded && customerLoaded && orderLoaded && productPrototypeLoaded,
-				businessTestFile);
+			// Auto-grading with yakshaAssert
+			yakshaAssert(currentTest(), productLoaded && customerLoaded && orderLoaded && productPrototypeLoaded,
+					businessTestFile);
+		} catch (Exception ex) {
+			yakshaAssert(currentTest(), false,
+					businessTestFile);
+		}
 	}
 
 	// Test if AppConfig class contains @Configuration annotation
@@ -95,71 +100,83 @@ public class ECommerceJavaConfigControllerTest {
 	// AppConfig
 	@Test
 	public void testBeansPresenceInAppConfig() throws IOException {
-		// Load the context using Java-based configuration
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		try {
+			// Load the context using Java-based configuration
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		// Retrieve beans from the context
-		Product product = context.getBean("product", Product.class); // Singleton Product bean
-		Product productPrototype = context.getBean("productPrototype", Product.class); // Prototype Product bean
-		Customer customer = context.getBean(Customer.class);
-		Order order = context.getBean(Order.class);
+			// Retrieve beans from the context
+			Product product = context.getBean("product", Product.class); // Singleton Product bean
+			Product productPrototype = context.getBean("productPrototype", Product.class); // Prototype Product bean
+			Customer customer = context.getBean(Customer.class);
+			Order order = context.getBean(Order.class);
 
-		// Assert the presence of beans
-		boolean productLoaded = product != null;
-		boolean productPrototypeLoaded = productPrototype != null;
-		boolean customerLoaded = customer != null;
-		boolean orderLoaded = order != null;
+			// Assert the presence of beans
+			boolean productLoaded = product != null;
+			boolean productPrototypeLoaded = productPrototype != null;
+			boolean customerLoaded = customer != null;
+			boolean orderLoaded = order != null;
 
-		// Verify that exactly one instance of each Product bean exists
-		boolean onlyOneProductBean = product != null && productPrototype != null && !product.equals(productPrototype);
+			// Verify that exactly one instance of each Product bean exists
+			boolean onlyOneProductBean = product != null && productPrototype != null
+					&& !product.equals(productPrototype);
 
-		// Log the checks for debugging
-		System.out.println("Product bean loaded: " + productLoaded);
-		System.out.println("Product Prototype bean loaded: " + productPrototypeLoaded);
-		System.out.println("Customer bean loaded: " + customerLoaded);
-		System.out.println("Order bean loaded: " + orderLoaded);
-		System.out.println("Only one Product bean and one ProductPrototype bean present: " + onlyOneProductBean);
+			// Log the checks for debugging
+			System.out.println("Product bean loaded: " + productLoaded);
+			System.out.println("Product Prototype bean loaded: " + productPrototypeLoaded);
+			System.out.println("Customer bean loaded: " + customerLoaded);
+			System.out.println("Order bean loaded: " + orderLoaded);
+			System.out.println("Only one Product bean and one ProductPrototype bean present: " + onlyOneProductBean);
 
-		// Auto-grading with yakshaAssert
-		yakshaAssert(currentTest(),
-				productLoaded && productPrototypeLoaded && customerLoaded && orderLoaded && onlyOneProductBean,
-				businessTestFile);
+			// Auto-grading with yakshaAssert
+			yakshaAssert(currentTest(),
+					productLoaded && productPrototypeLoaded && customerLoaded && orderLoaded && onlyOneProductBean,
+					businessTestFile);
+		} catch (Exception ex) {
+			yakshaAssert(currentTest(), false,
+					businessTestFile);
+		}
 	}
 
 	// Test to check if 2 Product beans are present with correct scope values
 	// (singleton and prototype)
 	@Test
 	public void testProductBeansScope() throws IOException {
-		// Load the context using Java-based configuration
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		try {
+			// Load the context using Java-based configuration
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		// Retrieve beans from the context by name to avoid ambiguity
-		Product productSingleton = context.getBean("product", Product.class); // Singleton Product bean
-		Product productPrototype = context.getBean("productPrototype", Product.class); // Prototype Product bean
+			// Retrieve beans from the context by name to avoid ambiguity
+			Product productSingleton = context.getBean("product", Product.class); // Singleton Product bean
+			Product productPrototype = context.getBean("productPrototype", Product.class); // Prototype Product bean
 
-		// Assert the presence of beans
-		boolean productSingletonLoaded = productSingleton != null;
-		boolean productPrototypeLoaded = productPrototype != null;
+			// Assert the presence of beans
+			boolean productSingletonLoaded = productSingleton != null;
+			boolean productPrototypeLoaded = productPrototype != null;
 
-		// Verify that exactly one instance of each Product bean exists
-		boolean onlyOneProductBean = productSingleton != null && productPrototype != null
-				&& !productSingleton.equals(productPrototype);
+			// Verify that exactly one instance of each Product bean exists
+			boolean onlyOneProductBean = productSingleton != null && productPrototype != null
+					&& !productSingleton.equals(productPrototype);
 
-		// Verify the scope of the Product beans (Singleton vs Prototype)
-		boolean productSingletonScopeCorrect = context.getBeanFactory().getBeanDefinition("product").getScope()
-				.equals("singleton");
-		boolean productPrototypeScopeCorrect = context.getBeanFactory().getBeanDefinition("productPrototype").getScope()
-				.equals("prototype");
+			// Verify the scope of the Product beans (Singleton vs Prototype)
+			boolean productSingletonScopeCorrect = context.getBeanFactory().getBeanDefinition("product").getScope()
+					.equals("singleton");
+			boolean productPrototypeScopeCorrect = context.getBeanFactory().getBeanDefinition("productPrototype")
+					.getScope()
+					.equals("prototype");
 
-		// Log the checks for debugging
-		System.out.println("Singleton Product bean loaded: " + productSingletonLoaded);
-		System.out.println("Prototype Product bean loaded: " + productPrototypeLoaded);
-		System.out.println("Singleton Scope is correct: " + productSingletonScopeCorrect);
-		System.out.println("Prototype Scope is correct: " + productPrototypeScopeCorrect);
-		System.out.println("Both Product beans are distinct: " + onlyOneProductBean);
+			// Log the checks for debugging
+			System.out.println("Singleton Product bean loaded: " + productSingletonLoaded);
+			System.out.println("Prototype Product bean loaded: " + productPrototypeLoaded);
+			System.out.println("Singleton Scope is correct: " + productSingletonScopeCorrect);
+			System.out.println("Prototype Scope is correct: " + productPrototypeScopeCorrect);
+			System.out.println("Both Product beans are distinct: " + onlyOneProductBean);
 
-		// Auto-grading with yakshaAssert
-		yakshaAssert(currentTest(), productSingletonLoaded && productPrototypeLoaded && onlyOneProductBean
-				&& productSingletonScopeCorrect && productPrototypeScopeCorrect, businessTestFile);
+			// Auto-grading with yakshaAssert
+			yakshaAssert(currentTest(), productSingletonLoaded && productPrototypeLoaded && onlyOneProductBean
+					&& productSingletonScopeCorrect && productPrototypeScopeCorrect, businessTestFile);
+		} catch (Exception ex) {
+			yakshaAssert(currentTest(), false,
+					businessTestFile);
+		}
 	}
 }
